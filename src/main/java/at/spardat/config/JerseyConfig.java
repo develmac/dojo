@@ -3,6 +3,7 @@ package at.spardat.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.ApplicationPath;
@@ -11,6 +12,7 @@ import javax.ws.rs.ext.Provider;
 
 @Component
 @ApplicationPath("/api")
+@Import({DataServiceConfig.class})
 public class JerseyConfig extends ResourceConfig {
 
     @Autowired

@@ -1,7 +1,8 @@
 package at.spardat.resource;
 
-import at.spardat.service.PlaylistService;
-import at.spardat.service.UserService;
+import at.spardat.service.PlaylistDataService;
+import at.spardat.service.UserDataService;
+import at.spardat.service.dto.UserConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,9 +21,9 @@ import javax.ws.rs.core.MediaType;
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class UserResource {
 
-    private final PlaylistService playlistService;
+    private final PlaylistDataService playlistService;
 
-    private final UserService userService;
+    private final UserDataService userService;
 
     @GET
     @Path("/{id}/playlist")
@@ -31,6 +32,8 @@ public class UserResource {
         userService.getUserById(id)
                 .toObservable()
                 .cache()
+                .doOnEach(userDTONotification -> System.out.printf(userDTONotification.toString()))
+                .map(UserConverter::convertFromDTO)
                 .flatMap(playlistService::getPlayListForUser)
                 .subscribe(asyncResponse::resume,
                         err -> System.out.printf("BOOOM"));

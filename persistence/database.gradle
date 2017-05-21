@@ -1,0 +1,27 @@
+apply plugin: 'liquibase'
+
+
+
+liquibase {
+    activities {
+        main {
+            changeLogFile 'src/main/resources/changelog.groovy'
+            url 'jdbc:oracle:thin:@localhost:1521:XE'
+            username 'playlistsapp'
+            password 'tadaa'
+            driver 'oracle.jdbc.driver.OracleDriver'
+        }
+        second {
+            changeLogFile 'second.groovy'
+            url 'jdbc:h2:db/liquibase_workshop;FILE_LOCK=NO'
+            username 'sa'
+            password ''
+            changeLogParameters([ myToken: 'myvalue',
+                                  second: 'secondValue'])
+        }
+    }
+
+    // runList = project.ext.runList
+    // runList = 'main'
+    runList = 'main'
+}

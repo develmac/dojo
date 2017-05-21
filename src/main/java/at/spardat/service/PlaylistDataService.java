@@ -1,8 +1,8 @@
 package at.spardat.service;
 
 import at.spardat.model.domain.Playlist.Playlist;
-import at.spardat.model.domain.User.User;
-import at.spardat.model.domain.User.UserId;
+import at.spardat.model.domain.user.User;
+import at.spardat.model.domain.user.UserId;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import javaslang.Function3;
@@ -14,13 +14,13 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @Service
-public class PlaylistService {
+public class PlaylistDataService {
 
     final
-    UserService userService;
+    UserDataService userService;
 
     @Autowired
-    public PlaylistService(UserService userService) {
+    public PlaylistDataService(UserDataService userService) {
         this.userService = userService;
     }
 
@@ -50,7 +50,6 @@ public class PlaylistService {
                 emitter.onNext(ANY_PLAYLIST_ITEM.apply("bla" + i, "bla2", "mac"));
             }
             emitter.onComplete();
-
         });
     }
 

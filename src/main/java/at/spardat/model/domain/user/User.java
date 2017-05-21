@@ -1,4 +1,4 @@
-package at.spardat.model.domain.User;
+package at.spardat.model.domain.user;
 
 
 import lombok.Value;

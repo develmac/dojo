@@ -1,6 +1,6 @@
 package at.spardat.service;
 
-import at.spardat.model.domain.User.User;
+import at.spardat.service.dto.UserDTO;
 import io.reactivex.Single;
 import io.reactivex.observers.TestObserver;
 import org.junit.Test;
@@ -13,19 +13,22 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
+
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class UserServiceTest {
+public class UserDataServiceTest {
 
     @Autowired
-    private UserService userService;
+    private UserDataService userService;
+
 
     @Test
     public void getUserByName() throws Exception {
 
-        Single<User> result = userService.getUserByName("MaC");
 
-        TestObserver<User> userTestObserver = result.test();
+        Single<UserDTO> result = userService.getUserById("123");
+
+        TestObserver<UserDTO> userTestObserver = result.test();
 
         assertThat(userTestObserver.getEvents(), is(nullValue()));
 

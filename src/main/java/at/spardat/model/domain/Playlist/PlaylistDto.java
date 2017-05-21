@@ -1,7 +1,7 @@
 package at.spardat.model.domain.Playlist;
 
 
-import at.spardat.model.domain.User.User;
+import at.spardat.model.domain.user.User;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;

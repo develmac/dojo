@@ -2,7 +2,7 @@ package at.spardat.resource;
 
 import at.spardat.model.domain.Playlist.Playlist;
 import at.spardat.model.domain.Playlist.PlaylistTransformer;
-import at.spardat.service.PlaylistService;
+import at.spardat.service.PlaylistDataService;
 import io.reactivex.schedulers.Schedulers;
 import org.glassfish.jersey.server.ChunkedOutput;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import javax.ws.rs.core.MediaType;
 public class PlaylistResource {
 
     @Autowired
-    private PlaylistService playlistService;
+    private PlaylistDataService playlistService;
 
     @GET
     @Path("/test1")
@@ -57,7 +57,7 @@ public class PlaylistResource {
     @Path("/test4")
     @Produces(MediaType.APPLICATION_JSON)
     public ChunkedOutput<Playlist> getPlaylistSlow() {
-        final ChunkedOutput<Playlist> output = new ChunkedOutput<Playlist>(Playlist.class);
+        final ChunkedOutput<Playlist> output = new ChunkedOutput<>(Playlist.class);
         playlistService.getSlowPlaylist()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.newThread())
