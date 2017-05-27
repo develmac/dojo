@@ -1,7 +1,7 @@
 package at.spardat.resource;
 
-import at.spardat.model.domain.Playlist.Playlist;
-import at.spardat.model.domain.Playlist.PlaylistTransformer;
+import at.spardat.model.domain.playlist.Playlist;
+import at.spardat.model.domain.playlist.PlaylistTransformer;
 import at.spardat.service.PlaylistDataService;
 import io.reactivex.schedulers.Schedulers;
 import org.glassfish.jersey.server.ChunkedOutput;

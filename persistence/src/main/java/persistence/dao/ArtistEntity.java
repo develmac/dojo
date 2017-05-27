@@ -1,5 +1,6 @@
 package persistence.dao;
 
+import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -9,6 +10,7 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "ARTIST", schema = "PLAYLISTSAPP")
 @Accessors(chain = true)
+@Data
 public class ArtistEntity {
     @Id
     @GeneratedValue(generator = "system-uuid")
@@ -24,39 +26,6 @@ public class ArtistEntity {
     @Basic
     @Column(name = "FIP_DATE", nullable = true)
     private Timestamp fipDate;
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Timestamp getFipDate() {
-        return fipDate;
-    }
-
-    public void setFipDate(Timestamp fipDate) {
-        this.fipDate = fipDate;
-    }
 
     @Override
     public boolean equals(Object o) {

@@ -1,6 +1,6 @@
 package at.spardat.service;
 
-import at.spardat.model.domain.Playlist.Playlist;
+import at.spardat.model.domain.playlist.Playlist;
 import at.spardat.model.domain.user.User;
 import at.spardat.model.domain.user.UserId;
 import io.reactivex.Observable;

@@ -1,5 +1,6 @@
 package config;
 
+import javaslang.control.Option;
 import lombok.SneakyThrows;
 import oracle.jdbc.pool.OracleDataSource;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +12,9 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import persistence.dao.ArtistEntity;
+import persistence.reposervice.ArtistDbChangeNotification;
 import persistence.reposervice.ArtistRepoService;
+import util.DbUtils;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -37,6 +40,14 @@ public class PersistenceConfig {
     @Bean
     public ArtistRepoService artistRepoService() {
         return new ArtistRepoService();
+    }
+
+    @Bean
+    public ArtistDbChangeNotification artistDbChangeNotification(DataSource dataSource) {
+        return Option.of(dataSource)
+                .map(DbUtils::getOracleConnectionFromDataSource)
+                .map(ArtistDbChangeNotification::new)
+                .get();
     }
 
     @Bean

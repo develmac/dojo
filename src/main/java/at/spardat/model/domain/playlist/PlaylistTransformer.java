@@ -1,4 +1,4 @@
-package at.spardat.model.domain.Playlist;
+package at.spardat.model.domain.playlist;
 
 
 public class PlaylistTransformer {

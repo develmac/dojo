@@ -1,36 +1,36 @@
 package persistence.repo
 
 import config.PersistenceConfig
+import groovy.transform.TypeChecked
+import javaslang.control.Try
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import persistence.dao.ArtistEntity
-import persistence.reposervice.ArtistRepoService
 import spock.lang.Specification
+import spock.util.concurrent.PollingConditions
 
 @ContextConfiguration(classes = [PersistenceConfig])
-class ArtistRepoSpec extends Specification {
+@TypeChecked
+class ArtistRepoSpec extends Specification implements ArtistRepoSpecSteps {
 
     @Autowired
     public ArtistRepo artistRepo
+    private static final String ANY_NAME = "any_name"
 
-    @Autowired
-    private ArtistRepoService artistRepoService
+    PollingConditions conditions = new PollingConditions(timeout: 5)
 
-
-    def "should inject"() {
-        expect:
-        artistRepoService
-    }
-
-    def "should create playlist"() {
+    def "should create artist"() {
         given:
-        artistRepo.findAllByName("any_name").size() == 0
-        def newArtist = new ArtistEntity()
-        newArtist.setName("any_name")
-        when:
-        artistRepo.save(newArtist)
-        then:
-        artistRepo.findAllByName("any_name").size() == 1
+        "no artists exist"()
 
+        when:
+        Try.of({
+            new ArtistEntity().setName("any_name")
+        }).mapTry(artistRepo.&save)
+
+        then:
+        artistRepo.findAllByName(ANY_NAME).size() == 1
     }
+
+
 }
