@@ -10,6 +10,10 @@ buildscript {
     }
 }
 
+configurations {
+    all*.exclude module : 'spring-boot-starter-logging'
+}
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'groovy'
@@ -33,7 +37,9 @@ subprojects {
         testRuntime "net.bytebuddy:byte-buddy:1.6.5"          // allows mocking of classes (in addition to interfaces)
         testRuntime "org.objenesis:objenesis:2.5.1"
 
-        compile('org.springframework.boot:spring-boot-starter-jersey')
+        compile('org.springframework.boot:spring-boot-starter-jersey') {
+            exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        }
         testCompile('org.springframework.boot:spring-boot-starter-test')
 
     }
@@ -45,30 +51,32 @@ project(':persistence') {
     }
 }
 
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'idea'
 
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 
-
 dependencies {
+
     compile('org.springframework.boot:spring-boot-starter-jersey') {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
     }
     compile("org.springframework.boot:spring-boot-starter-log4j2")
-
+    compile project(':persistence')
     // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxjava
     compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.0.7'
     compile group: 'io.javaslang', name: 'javaslang', version: '2.0.5'
     compile('org.projectlombok:lombok:1.16.16')
-
 
 
     //Spock
@@ -81,6 +89,8 @@ dependencies {
     testRuntime "org.objenesis:objenesis:2.5.1"
     // allows mocking of classes without default constructor (together with CGLIB)
 
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
     testCompile 'io.rest-assured:rest-assured:3.0.2'
 }

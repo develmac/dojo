@@ -15,13 +15,16 @@ import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 
-
 @Component
 @Path("/playlist")
 public class PlaylistResource {
 
+    private final PlaylistDataService playlistService;
+
     @Autowired
-    private PlaylistDataService playlistService;
+    public PlaylistResource(PlaylistDataService playlistService) {
+        this.playlistService = playlistService;
+    }
 
     @GET
     @Path("/test1")

@@ -1,7 +1,5 @@
 apply plugin: 'liquibase'
 
-
-
 liquibase {
     activities {
         main {
