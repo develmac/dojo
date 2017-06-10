@@ -13,11 +13,18 @@ import persistence.repo.ArtistRepo;
 public class ArtistRepoService {
 
     @Autowired
-    public ArtistRepo artistRepo;
+    private ArtistRepo artistRepo;
 
     public Observable<ArtistEntity> findAllByName(String name) {
         return Option.of(name)
                 .map(artistRepo::findAllByName)
+                .map(Observable::fromIterable)
+                .getOrElse(Observable::empty);
+    }
+
+    public Observable<ArtistEntity> findAllByNameLike(String name) {
+        return Option.of(name)
+                .map(artistRepo::findAllByNameLike)
                 .map(Observable::fromIterable)
                 .getOrElse(Observable::empty);
     }
@@ -29,7 +36,7 @@ public class ArtistRepoService {
                 .getOrElse(Single::never);
     }
 
-    public Observable<ArtistEntity> findAllById(String id) {
+    Observable<ArtistEntity> findAllById(String id) {
         return Option.of(id)
                 .map(artistRepo::findAllByRowId)
                 .map(Observable::fromIterable)

@@ -33,4 +33,21 @@ class ArtistRepoSpec extends Specification implements ArtistRepoSpecSteps {
     }
 
 
+    def "should create many artists"() {
+        given:
+        "no artists exist"()
+
+        when:
+        int i = 0
+        1000000.times {
+            i++
+            Try.of({
+                new ArtistEntity().setName("any_name_$i")
+            }).mapTry(artistRepo.&save)
+        }
+
+        then:
+        artistRepo.findAllByName(ANY_NAME).size() == 1
+    }
+
 }

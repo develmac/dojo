@@ -8,11 +8,11 @@ import org.glassfish.jersey.server.ChunkedOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Path("/artist")
@@ -28,7 +28,7 @@ public class ArtistResource {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public ChunkedOutput<ArtistRto> getPlaylistSlow(@PathParam("id") String artistId) {
+    public ChunkedOutput<ArtistRto> getArtistById(@PathParam("id") String artistId) {
         final ChunkedOutput<ArtistRto> output = new ChunkedOutput<>(ArtistRto.class);
         artistDomainService
                 .artistsById(artistId)
@@ -38,5 +38,23 @@ public class ArtistResource {
 
         return output;
     }
+
+    @GET
+    @Path("/find")
+    @Produces(MediaType.APPLICATION_JSON)
+    public ChunkedOutput<List<ArtistRto>> getArtistByName(@QueryParam(value = "name") String artistName) throws IOException {
+        final ChunkedOutput<List<ArtistRto>> output = new ChunkedOutput<>(ArtistRto.class);
+        List<ArtistRto> resultList = new ArrayList<>();
+        artistDomainService
+                .artistsByNameLike(artistName)
+                .map(ArtistTransformer::from)
+                .subscribe(resultList::add);
+
+        output.write(resultList); //TODO: do it real? rx style
+        output.close();
+        return output;
+    }
+
+
 
 }

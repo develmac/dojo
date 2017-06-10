@@ -13,6 +13,8 @@ public interface ArtistRepo extends JpaRepository<ArtistEntity, String> {
 
     List<ArtistEntity> findAllByName(String name);
 
+    List<ArtistEntity> findAllByNameLike(String name);
+
     List<ArtistEntity> findAllById(String id);
 
     @Query(value = "SELECT * FROM ARTIST WHERE ROWID in (?1)", nativeQuery = true)
