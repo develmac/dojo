@@ -46,7 +46,7 @@ class ArtistNotificationServiceSpec extends Specification implements ArtistRepoS
 
         then:
         conditions.eventually {
-            assert artistEntity.getName() == "any_name2"
+            assert artistEntity.getName() == "any_name"
         }
 
     }

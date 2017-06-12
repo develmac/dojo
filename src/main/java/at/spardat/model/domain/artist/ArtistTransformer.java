@@ -14,4 +14,15 @@ public class ArtistTransformer {
                 .name(artistEntity.getName())
                 .description(artistEntity.getDescription()).build();
     }
+
+    public static Artist from(ArtistRto artistRto) {
+        return Artist.builder()
+                .name(artistRto.getName())
+                .description(artistRto.getDescription())
+                .build();
+    }
+
+    public static ArtistEntity entityFrom(Artist artist) {
+        return new ArtistEntity().setName(artist.getName()).setDescription(artist.getDescription());
+    }
 }
