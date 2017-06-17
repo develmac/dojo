@@ -30,7 +30,7 @@ public class ArtistPushCtrl {
     @MessageMapping("/artist")
     public void artistReq(ArtistRto artistRto) {
         Try.of(() -> artistRto)
-                .map(ArtistTransformer::from)
+                .map(ArtistTransformer::modelFrom)
                 .map(ArtistTransformer::entityFrom)
                 .mapTry(artistRepoService::save)
                 .onFailure(throwable -> System.out.printf("ERROR-> %s", throwable));
@@ -39,8 +39,8 @@ public class ArtistPushCtrl {
     private void startListeningForartistCreated() {
         artistNotificationService
                 .startListeningForNewEntities()
-                .map(ArtistTransformer::from)
-                .map(ArtistTransformer::from)
+                .map(ArtistTransformer::modelFrom)
+                .map(ArtistTransformer::modelFrom)
                 .doOnNext(artistRto -> System.out.printf("Sending new artist event using WS!"))
                 .subscribe(this::sendArtistRto);
 

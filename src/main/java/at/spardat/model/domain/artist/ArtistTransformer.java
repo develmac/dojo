@@ -5,17 +5,17 @@ import persistence.dao.ArtistEntity;
 
 public class ArtistTransformer {
 
-    public static ArtistRto from(Artist artist) {
+    public static ArtistRto modelFrom(Artist artist) {
         return ArtistRto.of(artist.name, artist.description);
     }
 
-    public static Artist from(ArtistEntity artistEntity) {
+    public static Artist modelFrom(ArtistEntity artistEntity) {
         return Artist.builder()
                 .name(artistEntity.getName())
                 .description(artistEntity.getDescription()).build();
     }
 
-    public static Artist from(ArtistRto artistRto) {
+    public static Artist modelFrom(ArtistRto artistRto) {
         return Artist.builder()
                 .name(artistRto.getName())
                 .description(artistRto.getDescription())

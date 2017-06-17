@@ -22,19 +22,19 @@ public class ArtistDomainService {
     public Single<Artist> artistsById(String id) {
         return artistRepoService
                 .findById(id)
-                .map(ArtistTransformer::from);
+                .map(ArtistTransformer::modelFrom);
     }
 
     public Observable<Artist> artistsByName(String name) {
         return artistRepoService
                 .findAllByName(name)
-                .map(ArtistTransformer::from);
+                .map(ArtistTransformer::modelFrom);
     }
 
     public Observable<Artist> artistsByNameLike(String name) {
         return artistRepoService
                 .findAllByNameLike(name)
-                .map(ArtistTransformer::from);
+                .map(ArtistTransformer::modelFrom);
     }
 
 }

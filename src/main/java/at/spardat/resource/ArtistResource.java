@@ -32,7 +32,7 @@ public class ArtistResource {
         final ChunkedOutput<ArtistRto> output = new ChunkedOutput<>(ArtistRto.class);
         artistDomainService
                 .artistsById(artistId)
-                .map(ArtistTransformer::from)
+                .map(ArtistTransformer::modelFrom)
                 .doFinally(output::close)
                 .subscribe(output::write, err -> System.out.printf("BAM"));
 
@@ -47,7 +47,7 @@ public class ArtistResource {
         List<ArtistRto> resultList = new ArrayList<>();
         artistDomainService
                 .artistsByNameLike(artistName)
-                .map(ArtistTransformer::from)
+                .map(ArtistTransformer::modelFrom)
                 .subscribe(resultList::add);
 
         output.write(resultList); //TODO: do it real? rx style
