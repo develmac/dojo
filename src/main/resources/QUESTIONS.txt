@@ -3,4 +3,4 @@
 
 Tasks:
 
-Create IT for ArtistPushCtrl
+Create IT for ChatMsgPushCtrl

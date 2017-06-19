@@ -16,7 +16,7 @@ import java.util.Properties;
 
 @RequiredArgsConstructor
 @Log4j2
-public class ArtistDbChangeNotification {
+public class ChatMsgDbChangeNotification {
     private final OracleConnection oracleConnection;
 
     public Observable<DatabaseChangeEvent> startListeningForNotifications() {

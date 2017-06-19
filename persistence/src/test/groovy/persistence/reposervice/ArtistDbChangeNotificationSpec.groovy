@@ -7,33 +7,33 @@ import javaslang.control.Try
 import oracle.jdbc.dcn.DatabaseChangeEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
-import persistence.dao.ArtistEntity
-import persistence.repo.ArtistRepo
-import persistence.repo.ArtistRepoSpecSteps
+import persistence.dao.ChatMsgEntity
+import persistence.repo.ChatMsgRepo
+import persistence.repo.ChatMsgRepoSpecSteps
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
 
 @ContextConfiguration(classes = [PersistenceConfig])
 @TypeChecked
-class ArtistDbChangeNotificationSpec extends Specification implements ArtistRepoSpecSteps {
+class ChatMsgDbChangeNotificationSpec extends Specification implements ChatMsgRepoSpecSteps {
     PollingConditions conditions = new PollingConditions(timeout: 5)
 
     @Autowired
-    private final ArtistDbChangeNotification artistDbChangeNotification
+    private final ChatMsgDbChangeNotification chatMsgDbChangeNotification
 
     @Autowired
-    private final ArtistRepo artistRepo
+    private final ChatMsgRepo chatMsgRepo
 
     def "should inject"() {
         expect:
-        artistDbChangeNotification
+        chatMsgDbChangeNotification
     }
 
-    def "should notify on insert artist"() {
+    def "should notify on insert chatMsg"() {
         given:
-        "no artists exist"()
+        "no chatMsgs exist"()
         Observable<DatabaseChangeEvent> observable =
-                artistDbChangeNotification
+                chatMsgDbChangeNotification
                         .startListeningForNotifications()
                         .doOnError({ println "db notif on error $it" })
                         .doOnNext({ println "on next called" })
@@ -45,8 +45,8 @@ class ArtistDbChangeNotificationSpec extends Specification implements ArtistRepo
 
         when:
         Try.of({
-            new ArtistEntity().setName("any_name")
-        }).mapTry(artistRepo.&save)
+            new ChatMsgEntity().setName("any_name")
+        }).mapTry(chatMsgRepo.&save)
 
         then:
         conditions.eventually {

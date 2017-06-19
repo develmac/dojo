@@ -6,47 +6,47 @@ import io.reactivex.Observable
 import javaslang.control.Try
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
-import persistence.dao.ArtistEntity
-import persistence.repo.ArtistRepo
-import persistence.repo.ArtistRepoSpecSteps
+import persistence.dao.ChatMsgEntity
+import persistence.repo.ChatMsgRepo
+import persistence.repo.ChatMsgRepoSpecSteps
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
 
 @TypeChecked
 @ContextConfiguration(classes = [PersistenceConfig])
-class ArtistNotificationServiceSpec extends Specification implements ArtistRepoSpecSteps {
+class ChatMsgNotificationServiceSpec extends Specification implements ChatMsgRepoSpecSteps {
     PollingConditions conditions = new PollingConditions(timeout: 15)
 
     @Autowired
-    private ArtistNotificationService artistNotificationService
+    private ChatMsgNotificationService chatMsgNotificationService
 
     @Autowired
-    private ArtistRepo artistRepo
+    private ChatMsgRepo chatMsgRepo
 
     def 'should get back new entity'() {
         given:
-        "no artists exist"()
+        "no chatMsgs exist"()
 
         and:
-        Observable<ArtistEntity> observable =
-                artistNotificationService
+        Observable<ChatMsgEntity> observable =
+                chatMsgNotificationService
                         .startListeningForNewEntities()
                         .doOnError({ println "db notif on error $it" })
-                        .doOnNext({ println "new artist entity found $it" })
+                        .doOnNext({ println "new chatMsg entity found $it" })
 
-        ArtistEntity artistEntity
-        observable.subscribe({ ArtistEntity nextSignal ->
-            artistEntity = nextSignal
+        ChatMsgEntity chatMsgEntity
+        observable.subscribe({ ChatMsgEntity nextSignal ->
+            chatMsgEntity = nextSignal
         }, { println "KABOOM" })
 
         when:
         Try.of({
-            new ArtistEntity().setName("any_name")
-        }).mapTry(artistRepo.&save)
+            new ChatMsgEntity().setName("any_name")
+        }).mapTry(chatMsgRepo.&save)
 
         then:
         conditions.eventually {
-            assert artistEntity.getName() == "any_name"
+            assert chatMsgEntity.getName() == "any_name"
         }
 
     }

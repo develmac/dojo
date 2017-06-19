@@ -11,9 +11,9 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
-import persistence.dao.ArtistEntity;
-import persistence.reposervice.ArtistDbChangeNotification;
-import persistence.reposervice.ArtistRepoService;
+import persistence.dao.ChatMsgEntity;
+import persistence.reposervice.ChatMsgDbChangeNotification;
+import persistence.reposervice.ChatMsgRepoService;
 import util.DbUtils;
 
 import javax.persistence.EntityManagerFactory;
@@ -38,15 +38,15 @@ public class PersistenceConfig {
     }
 
     @Bean
-    public ArtistRepoService artistRepoService() {
-        return new ArtistRepoService();
+    public ChatMsgRepoService chatMsgRepoService() {
+        return new ChatMsgRepoService();
     }
 
     @Bean
-    public ArtistDbChangeNotification artistDbChangeNotification(DataSource dataSource) {
+    public ChatMsgDbChangeNotification chatMsgDbChangeNotification(DataSource dataSource) {
         return Option.of(dataSource)
                 .map(DbUtils::getOracleConnectionFromDataSource)
-                .map(ArtistDbChangeNotification::new)
+                .map(ChatMsgDbChangeNotification::new)
                 .get();
     }
 
@@ -58,7 +58,7 @@ public class PersistenceConfig {
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan(ArtistEntity.class.getPackage().getName());
+        factory.setPackagesToScan(ChatMsgEntity.class.getPackage().getName());
         factory.setDataSource(dataSource());
         factory.afterPropertiesSet();
 

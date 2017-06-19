@@ -1,6 +1,6 @@
 databaseChangeLog {
     changeSet(id: 'cl-init-1', author: 'mac (generated)') {
-        createTable(tableName: 'ARTIST') {
+        createTable(tableName: 'CHATMSG') {
             column(name: 'ID', type: 'VARCHAR2(36)') {
                 constraints(nullable: false)
             }
@@ -13,11 +13,11 @@ databaseChangeLog {
     }
 
     changeSet(id: 'cl-init-2', author: 'mac (generated)') {
-        addPrimaryKey(columnNames: 'ID', constraintName: 'ARTIST_ID_PK', tableName: 'ARTIST')
+        addPrimaryKey(columnNames: 'ID', constraintName: 'CHATMSG_ID_PK', tableName: 'CHATMSG')
     }
 
     changeSet(id: 'cl-init-3', author: 'mac (generated)') {
-        createIndex(indexName: 'ARTIST_NAME_INDEX', tableName: 'ARTIST') {
+        createIndex(indexName: 'CHATMSG_NAME_INDEX', tableName: 'CHATMSG') {
             column(name: 'NAME')
         }
     }
