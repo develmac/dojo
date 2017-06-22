@@ -45,7 +45,7 @@ class ChatMsgDbChangeNotificationSpec extends Specification implements ChatMsgRe
 
         when:
         Try.of({
-            new ChatMsgEntity().setName("any_name")
+            new ChatMsgEntity().setOrigin("any_name")
         }).mapTry(chatMsgRepo.&save)
 
         then:

@@ -43,7 +43,7 @@ public class ChatMsgDbChangeNotification {
         Statement stmt = oracleConnection.createStatement();
         // associate the statement with the registration:
         ((OracleStatement) stmt).setDatabaseChangeRegistration(dcr);
-        ResultSet rs = stmt.executeQuery("select ID from ARTIST");
+        ResultSet rs = stmt.executeQuery("SELECT ID_CHATMSG FROM CHATMSG");
         while (rs.next()) {
         }
         String[] tableNames = dcr.getTables();

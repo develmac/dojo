@@ -6,23 +6,23 @@ import persistence.dao.ChatMsgEntity;
 public class ChatMsgTransformer {
 
     public static ChatMsgRto modelFrom(ChatMsg chatMsg) {
-        return ChatMsgRto.of(chatMsg.name, chatMsg.description);
+        return ChatMsgRto.of(chatMsg.origin, chatMsg.text);
     }
 
     public static ChatMsg modelFrom(ChatMsgEntity chatMsgEntity) {
         return ChatMsg.builder()
-                .name(chatMsgEntity.getName())
-                .description(chatMsgEntity.getDescription()).build();
+                .origin(chatMsgEntity.getOrigin())
+                .text(chatMsgEntity.getText()).build();
     }
 
     public static ChatMsg modelFrom(ChatMsgRto chatMsgRto) {
         return ChatMsg.builder()
-                .name(chatMsgRto.getName())
-                .description(chatMsgRto.getDescription())
+                .origin(chatMsgRto.getName())
+                .text(chatMsgRto.getDescription())
                 .build();
     }
 
     public static ChatMsgEntity entityFrom(ChatMsg chatMsg) {
-        return new ChatMsgEntity().setName(chatMsg.getName()).setDescription(chatMsg.getDescription());
+        return new ChatMsgEntity().setOrigin(chatMsg.getOrigin()).setText(chatMsg.getText());
     }
 }

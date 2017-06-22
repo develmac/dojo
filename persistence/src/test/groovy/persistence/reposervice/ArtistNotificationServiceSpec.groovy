@@ -41,12 +41,12 @@ class ChatMsgNotificationServiceSpec extends Specification implements ChatMsgRep
 
         when:
         Try.of({
-            new ChatMsgEntity().setName("any_name")
+            new ChatMsgEntity().setOrigin("any_name")
         }).mapTry(chatMsgRepo.&save)
 
         then:
         conditions.eventually {
-            assert chatMsgEntity.getName() == "any_name"
+            assert chatMsgEntity.getOrigin() == "any_name"
         }
 
     }
