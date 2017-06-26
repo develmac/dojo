@@ -6,11 +6,13 @@ import oracle.jdbc.pool.OracleDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import persistence.dao.ChatMsgEntity;
 import persistence.reposervice.ChatMsgDbChangeNotification;
 import persistence.reposervice.ChatMsgRepoService;
@@ -23,11 +25,12 @@ import java.sql.SQLException;
 @Configuration
 @EnableJpaRepositories(basePackages = "persistence.repo")
 @ComponentScan(basePackages = "persistence")
+@EnableTransactionManagement
 public class PersistenceConfig {
 
     @Bean
+    @Primary
     public DataSource dataSource() throws SQLException {
-
         OracleDataSource dataSource = new OracleDataSource();
         dataSource.setUser("playlistsapp");
         dataSource.setPassword("tadaa");

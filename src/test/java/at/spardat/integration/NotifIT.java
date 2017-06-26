@@ -31,7 +31,7 @@ public class NotifIT {
     private Integer randomServerPort;
 
 
-    private static final String WEBSOCKET_TOPIC = "/topic";
+    private static final String WEBSOCKET_TOPIC = "/topic/chatmsg";
 
     private BlockingQueue<String> blockingQueue;
     private WebSocketStompClient stompClient;

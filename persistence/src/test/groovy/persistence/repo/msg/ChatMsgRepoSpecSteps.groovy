@@ -1,4 +1,4 @@
-package persistence.repo
+package persistence.repo.msg
 
 import liquibase.Liquibase
 import liquibase.database.jvm.JdbcConnection
@@ -8,6 +8,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.rules.TestName
 import org.springframework.beans.factory.annotation.Autowired
+import persistence.repo.ChatMsgRepo
 
 import javax.sql.DataSource
 import java.sql.SQLException
@@ -55,9 +56,9 @@ trait ChatMsgRepoSpecSteps {
             try {
                 liquibase.rollback("emptydatabase", "autotest");
             } catch (LiquibaseException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException(e)
             } finally {
-                liquibase = null;
+                liquibase = null
             }
         }
     }

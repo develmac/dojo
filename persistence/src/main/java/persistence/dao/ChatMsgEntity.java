@@ -2,6 +2,7 @@ package persistence.dao;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -13,6 +14,8 @@ import java.sql.Timestamp;
 public class ChatMsgEntity {
     @Id
     @Column(name = "ID_CHATMSG", nullable = false, length = 36)
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
     private String chatmsgId;
     @Basic
     @Column(name = "ORIGIN", nullable = false, length = 200)

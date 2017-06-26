@@ -2,6 +2,7 @@ package at.spardat.integration;
 
 
 import io.restassured.RestAssured;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,10 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
-//@ContextConfiguration(classes = IntegrationTestConfig.class)
-
 public class UsersIT {
 
 
-    public static final String ANY_BODY = "[{\n" +
+    private static final String ANY_BODY = "[{\n" +
             "\t\"username\": \"mac\",\n" +
             "\t\"id\": 123\n" +
             "}]";
@@ -39,6 +38,7 @@ public class UsersIT {
     private RestTemplate restTemplate;
 
     @Test
+    @Ignore
     public void should_find_playlist_for_user_by_userId() throws Exception {
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
 

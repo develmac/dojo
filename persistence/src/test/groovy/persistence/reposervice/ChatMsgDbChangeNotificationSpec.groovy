@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import persistence.dao.ChatMsgEntity
 import persistence.repo.ChatMsgRepo
-import persistence.repo.ChatMsgRepoSpecSteps
+import persistence.repo.msg.ChatMsgRepoSpecSteps
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
 
