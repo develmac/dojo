@@ -31,7 +31,7 @@ public class NotifIT {
     private Integer randomServerPort;
 
 
-    private static final String WEBSOCKET_TOPIC = "/topic/chatmsg";
+    private static final String WEBSOCKET_TOPIC = "/topic";
 
     private BlockingQueue<String> blockingQueue;
     private WebSocketStompClient stompClient;
@@ -49,13 +49,13 @@ public class NotifIT {
         StompSession session = stompClient
                 .connect(WEBSOCKET_URI, new StompSessionHandlerAdapter() {
                 })
-                .get(1, SECONDS);
+                .get(5, SECONDS);
         session.subscribe(WEBSOCKET_TOPIC, new DefaultStompFrameHandler());
 
         String message = "MESSAGE TEST";
         session.send(WEBSOCKET_TOPIC, message.getBytes());
 
-        Assert.assertEquals(message, blockingQueue.poll(1, SECONDS));
+        Assert.assertEquals(message, blockingQueue.poll(5, SECONDS));
     }
 
     class DefaultStompFrameHandler implements StompFrameHandler {

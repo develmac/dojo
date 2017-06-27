@@ -2,13 +2,15 @@ package at.spardat.controller;
 
 import at.spardat.model.domain.chat.ChatMsgTransformer;
 import at.spardat.rto.ChatMsgRto;
-import javaslang.control.Try;
+import io.reactivex.Single;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import persistence.dao.RoomEntity;
 import persistence.reposervice.ChatMsgNotificationService;
 import persistence.reposervice.ChatMsgRepoService;
+import persistence.reposervice.RoomRepoService;
 
 @Controller
 public class ChatMsgPushCtrl {
@@ -19,21 +21,26 @@ public class ChatMsgPushCtrl {
 
     private final ChatMsgRepoService chatMsgRepoService;
 
+    private final RoomRepoService roomRepoService;
+
     @Autowired
-    public ChatMsgPushCtrl(SimpMessagingTemplate template, ChatMsgNotificationService chatMsgNotificationService, ChatMsgRepoService chatMsgRepoService) {
+    public ChatMsgPushCtrl(SimpMessagingTemplate template, ChatMsgNotificationService chatMsgNotificationService, ChatMsgRepoService chatMsgRepoService, RoomRepoService roomRepoService) {
         this.template = template;
         this.chatMsgNotificationService = chatMsgNotificationService;
         this.chatMsgRepoService = chatMsgRepoService;
+        this.roomRepoService = roomRepoService;
         this.startListeningForchatMsgCreated();
     }
 
     @MessageMapping("/chatmsg")
     public void chatMsgReq(ChatMsgRto chatMsgRto) {
-        Try.of(() -> chatMsgRto)
+        Single<RoomEntity> roomEntitySingle = roomRepoService.findAllRooms().firstOrError();
+
+        Single.just(chatMsgRto)
                 .map(ChatMsgTransformer::modelFrom)
                 .map(ChatMsgTransformer::entityFrom)
-                .mapTry(chatMsgRepoService::save)
-                .onFailure(throwable -> System.out.printf("ERROR-> %s", throwable));
+                .map(chatMsgEntity -> chatMsgEntity.setChatRoom(roomEntitySingle.blockingGet()))
+                .subscribe(chatMsgRepoService::save);
     }
 
     private void startListeningForchatMsgCreated() {
