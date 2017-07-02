@@ -1,13 +1,14 @@
 package persistence.reposervice
 
-import config.PersistenceConfig
+import at.reactive.config.PersistenceConfig
+import at.reactive.domain.chat.ChatMsg
+import at.reactive.repo.ChatMsgRepo
+import at.reactive.reposervice.ChatMsgRepoPushService
 import groovy.transform.TypeChecked
 import io.reactivex.Observable
-import javaslang.control.Try
+import io.vavr.control.Try
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
-import persistence.dao.ChatMsgEntity
-import persistence.repo.ChatMsgRepo
 import persistence.repo.msg.ChatMsgRepoSpecSteps
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
@@ -18,7 +19,7 @@ class ChatMsgNotificationServiceSpec extends Specification implements ChatMsgRep
     PollingConditions conditions = new PollingConditions(timeout: 15)
 
     @Autowired
-    private ChatMsgNotificationService chatMsgNotificationService
+    private ChatMsgRepoPushService repoPushService
 
     @Autowired
     private ChatMsgRepo chatMsgRepo
@@ -28,20 +29,20 @@ class ChatMsgNotificationServiceSpec extends Specification implements ChatMsgRep
         "no chatMsgs exist"()
 
         and:
-        Observable<ChatMsgEntity> observable =
-                chatMsgNotificationService
+        Observable<ChatMsg> observable =
+                repoPushService
                         .startListeningForNewEntities()
                         .doOnError({ println "db notif on error $it" })
                         .doOnNext({ println "new chatMsg entity found $it" })
 
-        ChatMsgEntity chatMsgEntity
-        observable.subscribe({ ChatMsgEntity nextSignal ->
-            chatMsgEntity = nextSignal
+        ChatMsg chatMsg
+        observable.subscribe({ ChatMsg nextSignal ->
+            chatMsg = nextSignal
         }, { println "KABOOM" })
 
         when:
         Try.of({
-            new ChatMsgEntity().setOrigin("any_name")
+            ChatMsg.builder().origin("any_origin").build()
         }).mapTry(chatMsgRepo.&save)
 
         then:

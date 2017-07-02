@@ -1,12 +1,12 @@
 package persistence.repo.room
 
-import config.PersistenceConfig
+import at.reactive.config.PersistenceConfig
+import at.reactive.dao.RoomEntity
+import at.reactive.repo.RoomRepo
 import groovy.transform.TypeChecked
-import javaslang.control.Try
+import io.vavr.control.Try
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
-import persistence.dao.RoomEntity
-import persistence.repo.RoomRepo
 import spock.lang.Specification
 
 @ContextConfiguration(classes = [PersistenceConfig])

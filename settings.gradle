@@ -1,3 +1,6 @@
 rootProject.name = 'reactive-service'
 
-include('persistence')
+include 'persistence'
+include 'model'
+include 'web'
+include 'service'

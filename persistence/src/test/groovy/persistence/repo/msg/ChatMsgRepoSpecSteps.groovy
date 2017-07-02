@@ -1,5 +1,6 @@
 package persistence.repo.msg
 
+import at.reactive.repo.ChatMsgRepo
 import liquibase.Liquibase
 import liquibase.database.jvm.JdbcConnection
 import liquibase.exception.LiquibaseException
@@ -8,7 +9,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.rules.TestName
 import org.springframework.beans.factory.annotation.Autowired
-import persistence.repo.ChatMsgRepo
 
 import javax.sql.DataSource
 import java.sql.SQLException

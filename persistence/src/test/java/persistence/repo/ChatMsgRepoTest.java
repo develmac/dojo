@@ -1,7 +1,9 @@
 package persistence.repo;
 
 
-import config.PersistenceConfig;
+import at.reactive.config.PersistenceConfig;
+import at.reactive.dao.ChatMsgEntity;
+import at.reactive.repo.ChatMsgRepo;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -10,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import persistence.dao.ChatMsgEntity;
 
 import java.util.List;
 

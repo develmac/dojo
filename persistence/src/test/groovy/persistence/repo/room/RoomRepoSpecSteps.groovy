@@ -1,9 +1,9 @@
 package persistence.repo.room
 
-import javaslang.control.Try
+import at.reactive.dao.RoomEntity
+import at.reactive.repo.RoomRepo
+import io.vavr.control.Try
 import org.springframework.beans.factory.annotation.Autowired
-import persistence.dao.RoomEntity
-import persistence.repo.RoomRepo
 
 trait RoomRepoSpecSteps {
 

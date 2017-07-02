@@ -1,14 +1,15 @@
 package persistence.reposervice
 
-import config.PersistenceConfig
+import at.reactive.config.PersistenceConfig
+import at.reactive.dao.ChatMsgEntity
+import at.reactive.repo.ChatMsgRepo
+import at.reactive.reposervice.ChatMsgDbChangeNotification
 import groovy.transform.TypeChecked
 import io.reactivex.Observable
-import javaslang.control.Try
+import io.vavr.control.Try
 import oracle.jdbc.dcn.DatabaseChangeEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
-import persistence.dao.ChatMsgEntity
-import persistence.repo.ChatMsgRepo
 import persistence.repo.msg.ChatMsgRepoSpecSteps
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions

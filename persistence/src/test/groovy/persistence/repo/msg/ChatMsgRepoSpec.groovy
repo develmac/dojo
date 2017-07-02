@@ -1,14 +1,14 @@
 package persistence.repo.msg
 
-import config.PersistenceConfig
+import at.reactive.config.PersistenceConfig
+import at.reactive.dao.ChatMsgEntity
+import at.reactive.repo.ChatMsgRepo
+import at.reactive.repo.RoomRepo
 import groovy.transform.TypeChecked
-import javaslang.control.Try
+import io.vavr.control.Try
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.transaction.annotation.Transactional
-import persistence.dao.ChatMsgEntity
-import persistence.repo.ChatMsgRepo
-import persistence.repo.RoomRepo
 import persistence.repo.room.RoomRepoSpecSteps
 import spock.lang.Specification
 

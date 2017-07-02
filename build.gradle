@@ -3,6 +3,7 @@ buildscript {
         springBootVersion = '1.5.3.RELEASE'
     }
     repositories {
+        mavenLocal()
         mavenCentral()
     }
     dependencies {
@@ -20,13 +21,17 @@ subprojects {
     apply plugin: 'org.springframework.boot'
 
     repositories {
+        mavenLocal()
         mavenCentral()
     }
 
     dependencies {
         compile('org.projectlombok:lombok:1.16.16')
         compile("org.springframework.boot:spring-boot-starter-log4j2")
-        runtime("com.oracle:ojdbc6:11.2.0.4")
+
+        compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.0.7'
+        compile group: 'io.vavr', name: 'vavr', version: '0.9.0'
+        compile('org.projectlombok:lombok:1.16.16')
 
         //Spock
         compile "org.codehaus.groovy:groovy-all:2.4.10"
@@ -37,20 +42,10 @@ subprojects {
         testRuntime "net.bytebuddy:byte-buddy:1.6.5"          // allows mocking of classes (in addition to interfaces)
         testRuntime "org.objenesis:objenesis:2.5.1"
 
-        compile('org.springframework.boot:spring-boot-starter-jersey') {
-            exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-        }
         testCompile('org.springframework.boot:spring-boot-starter-test')
 
     }
 }
-
-project(':persistence') {
-    dependencies {
-
-    }
-}
-
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -66,20 +61,22 @@ repositories {
 
 
 dependencies {
-
     compile('org.springframework.boot:spring-boot-starter-jersey') {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
     }
     compile("org.springframework.boot:spring-boot-starter-websocket") {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
     }
-    compile("org.springframework.boot:spring-boot-starter-log4j2")
+
+    compile project(':web')
     compile project(':persistence')
+
+
+    compile("org.springframework.boot:spring-boot-starter-log4j2")
     // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxjava
     compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.0.7'
-    compile group: 'io.javaslang', name: 'javaslang', version: '2.0.5'
+    compile group: 'io.vavr', name: 'vavr', version: '0.9.0'
     compile('org.projectlombok:lombok:1.16.16')
-
 
     //Spock
     testCompile "org.codehaus.groovy:groovy-all:2.4.10"

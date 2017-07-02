@@ -1,13 +1,4 @@
-buildscript {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'org.liquibase:liquibase-gradle-plugin:1.2.0'
-        classpath 'com.oracle:ojdbc6:11.2.0.4'
-    }
-}
+
 plugins {
     id 'org.liquibase.gradle' version '1.2.4'
 }
@@ -22,9 +13,11 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}") {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
     }
+    compile project(':service')
+
     compile('com.oracle:ojdbc6:11.2.0.4')
     compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.0.7'
-    compile group: 'io.javaslang', name: 'javaslang', version: '2.0.5'
+    compile group: 'io.vavr', name: 'vavr', version: '0.9.0'
     testCompile group: 'org.spockframework', name: 'spock-spring', version: '1.1-groovy-2.4'
     testCompile group: 'org.liquibase', name: 'liquibase-core', version: '3.5.3'
 }
