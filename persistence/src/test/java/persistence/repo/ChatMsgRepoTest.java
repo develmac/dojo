@@ -7,6 +7,7 @@ import at.reactive.repo.ChatMsgRepo;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import static org.hamcrest.core.Is.is;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = PersistenceConfig.class)
+@Ignore // done with spock now
 public class ChatMsgRepoTest {
 
     @Autowired

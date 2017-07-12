@@ -3,8 +3,6 @@ package at.reactive.rto;
 import lombok.Value;
 
 @Value(staticConstructor = "of")
-public class ChatMsgRto {
+public class RoomRto {
     String name;
-    String description;
-    RoomRto room;
 }

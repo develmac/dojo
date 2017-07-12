@@ -9,5 +9,7 @@ public interface RoomRepoServicing {
 
     Observable<Room> findAllRooms();
 
+    Observable<Room> findAllByName(String name);
+
     Single<Room> save(Room room);
 }

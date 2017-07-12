@@ -14,7 +14,7 @@ public class NotificationCtrl {
     public ChatMsgRto greeting(String message) throws Exception {
         System.out.printf("PUSHIT");
         Thread.sleep(1000); // simulated delay
-        return ChatMsgRto.of("Juhuuu", "PUSH");
+        return ChatMsgRto.of("Juhuuu", "PUSH", null);
     }
 
 }

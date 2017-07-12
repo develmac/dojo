@@ -1,4 +1,4 @@
-package at.obsolete.integration.config;
+package at.reactive.integration.config;
 
 
 import org.springframework.boot.test.context.TestConfiguration;

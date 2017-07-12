@@ -1,9 +1,9 @@
 package at.reactive.controller;
 
 
-import at.reactive.chat.ChatMsgDomainService;
-import at.reactive.chat.ChatMsgRepoPushServicing;
+import at.reactive.chat.ChatMsgPushDomainService;
 import at.reactive.chat.RoomDomainService;
+import at.reactive.domain.chat.ChatMsg;
 import at.reactive.domain.room.Room;
 import at.reactive.rto.ChatMsgRto;
 import at.reactive.transformer.chat.ChatMsgRtoTransformer;
@@ -19,34 +19,36 @@ public class ChatMsgPushCtrl {
 
     private final SimpMessagingTemplate messagingTemplate;
 
-    private final ChatMsgRepoPushServicing chatMsgNotificationService;
+    private final ChatMsgPushDomainService chatMsgPushDomainService;
     private final RoomDomainService roomDomainService;
-    private final ChatMsgDomainService chatMsgDomainService;
 
     @Autowired
-    public ChatMsgPushCtrl(SimpMessagingTemplate messagingTemplate, ChatMsgRepoPushServicing chatMsgNotificationServicing,
-                           RoomDomainService roomDomainService, ChatMsgDomainService chatMsgDomainService) {
+    public ChatMsgPushCtrl(SimpMessagingTemplate messagingTemplate, ChatMsgPushDomainService chatMsgPushDomainService,
+                           RoomDomainService roomDomainService) {
         this.messagingTemplate = messagingTemplate;
-        this.chatMsgNotificationService = chatMsgNotificationServicing;
+        this.chatMsgPushDomainService = chatMsgPushDomainService;
         this.roomDomainService = roomDomainService;
-        this.chatMsgDomainService = chatMsgDomainService;
         this.startListeningForchatMsgCreated();
     }
 
     @MessageMapping("/chatmsg")
     public void chatMsgReq(ChatMsgRto chatMsgRto) {
-        Single<Room> roomEntitySingle = roomDomainService.allRooms().firstOrError();
 
-        Single.just(chatMsgRto)
-                .map(ChatMsgRtoTransformer::modelFrom)
-                .map(chatMsg -> chatMsg.setRoom(roomEntitySingle.blockingGet()))
-                .map(chatMsgDomainService::save)
-                .subscribe((chatMsgSingle, throwable) -> chatMsgSingle.subscribe());
+        Single<Room> roomSingle = roomDomainService.findByName(chatMsgRto.getRoom().getName()).firstOrError();
+
+        Single<ChatMsg> chatMsgSingle = Single.just(chatMsgRto)
+                .map(ChatMsgRtoTransformer::modelFrom);
+
+        roomSingle
+                .doOnError(throwable -> System.out.printf("ERROR: " + throwable))
+                .subscribe(room -> roomDomainService.addMsgToRoom(chatMsgSingle, room));
+
+
     }
 
     private void startListeningForchatMsgCreated() {
-        chatMsgNotificationService
-                .startListeningForNewEntities()
+        chatMsgPushDomainService
+                .onNewChatMsg()
                 .doOnNext(chatMsg -> System.out.printf("Sending new chatMsg event using WS!"))
                 .map(ChatMsgRtoTransformer::toRto)
                 .subscribe(this::sendChatMsgRto);

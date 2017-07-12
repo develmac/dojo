@@ -7,6 +7,7 @@ import at.reactive.repo.RoomRepo
 import groovy.transform.TypeChecked
 import io.vavr.control.Try
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.transaction.annotation.Transactional
 import persistence.repo.room.RoomRepoSpecSteps
@@ -14,6 +15,8 @@ import spock.lang.Specification
 
 @ContextConfiguration(classes = [PersistenceConfig])
 @TypeChecked
+@Transactional
+@Rollback
 class ChatMsgRepoSpec extends Specification implements ChatMsgRepoSpecSteps, RoomRepoSpecSteps {
 
     @Autowired
@@ -23,7 +26,7 @@ class ChatMsgRepoSpec extends Specification implements ChatMsgRepoSpecSteps, Roo
 
     private static final String ANY_ORIGIN = "any_name"
 
-    @Transactional
+
     def "should create chatMsg"() {
         given:
         "no chatMsgs exist"()
@@ -31,9 +34,9 @@ class ChatMsgRepoSpec extends Specification implements ChatMsgRepoSpecSteps, Roo
         assert "room with name fortune exists"().isSuccess() == true
         when:
         Try.of({ roomRepo.findAll().first() })
-                .mapTry({ new ChatMsgEntity().setOrigin(ANY_ORIGIN).setChatRoom(it) })
+                .mapTry({ new ChatMsgEntity().setOrigin(ANY_ORIGIN).setChatRoom(it).setText("juhuuu") })
                 .mapTry({
-            chatMsgRepo.save(it)
+            chatMsgRepo.saveAndFlush(it)
         }).get()
 
         then:

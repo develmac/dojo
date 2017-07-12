@@ -1,4 +1,4 @@
-package at.obsolete.integration;
+package at.reactive.integration;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -49,13 +49,13 @@ public class NotifIT {
         StompSession session = stompClient
                 .connect(WEBSOCKET_URI, new StompSessionHandlerAdapter() {
                 })
-                .get(5, SECONDS);
+                .get(15, SECONDS);
         session.subscribe(WEBSOCKET_TOPIC, new DefaultStompFrameHandler());
 
         String message = "MESSAGE TEST";
         session.send(WEBSOCKET_TOPIC, message.getBytes());
 
-        Assert.assertEquals(message, blockingQueue.poll(5, SECONDS));
+        Assert.assertEquals(message, blockingQueue.poll(15, SECONDS));
     }
 
     class DefaultStompFrameHandler implements StompFrameHandler {

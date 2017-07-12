@@ -1,9 +1,9 @@
 package persistence.reposervice
 
+import at.reactive.chat.ChatMsgRepoPushServicing
 import at.reactive.config.PersistenceConfig
 import at.reactive.domain.chat.ChatMsg
 import at.reactive.repo.ChatMsgRepo
-import at.reactive.reposervice.ChatMsgRepoPushService
 import groovy.transform.TypeChecked
 import io.reactivex.Observable
 import io.vavr.control.Try
@@ -19,7 +19,7 @@ class ChatMsgNotificationServiceSpec extends Specification implements ChatMsgRep
     PollingConditions conditions = new PollingConditions(timeout: 15)
 
     @Autowired
-    private ChatMsgRepoPushService repoPushService
+    private ChatMsgRepoPushServicing repoPushService
 
     @Autowired
     private ChatMsgRepo chatMsgRepo
@@ -42,12 +42,12 @@ class ChatMsgNotificationServiceSpec extends Specification implements ChatMsgRep
 
         when:
         Try.of({
-            ChatMsg.builder().origin("any_origin").build()
+            ChatMsg.builder().origin("bla bla").build()
         }).mapTry(chatMsgRepo.&save)
 
         then:
         conditions.eventually {
-            assert chatMsgEntity.getOrigin() == "any_name"
+            assert chatMsg.getOrigin() == "any_name"
         }
 
     }

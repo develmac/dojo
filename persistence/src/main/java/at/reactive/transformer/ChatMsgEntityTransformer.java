@@ -8,6 +8,7 @@ import lombok.experimental.UtilityClass;
 public class ChatMsgEntityTransformer {
     public static ChatMsg modelFrom(ChatMsgEntity chatMsgEntity) {
         return ChatMsg.builder()
+                .room(RoomTransformer.toModel(chatMsgEntity.getChatRoom()))
                 .origin(chatMsgEntity.getOrigin())
                 .text(chatMsgEntity.getText()).build();
     }
