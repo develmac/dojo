@@ -2,13 +2,19 @@ package persistence.reposervice
 
 import at.reactive.chat.ChatMsgRepoPushServicing
 import at.reactive.config.PersistenceConfig
+import at.reactive.dao.ChatMsgEntity
 import at.reactive.domain.chat.ChatMsg
 import at.reactive.repo.ChatMsgRepo
+import at.reactive.repo.RoomRepo
 import groovy.transform.TypeChecked
 import io.reactivex.Observable
 import io.vavr.control.Try
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.transaction.PlatformTransactionManager
+import org.springframework.transaction.TransactionStatus
+import org.springframework.transaction.support.TransactionCallbackWithoutResult
+import org.springframework.transaction.support.TransactionTemplate
 import persistence.repo.msg.ChatMsgRepoSpecSteps
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
@@ -20,9 +26,15 @@ class ChatMsgNotificationServiceSpec extends Specification implements ChatMsgRep
 
     @Autowired
     private ChatMsgRepoPushServicing repoPushService
-
     @Autowired
     private ChatMsgRepo chatMsgRepo
+    @Autowired
+    private RoomRepo roomRepo
+    @Autowired
+    private PlatformTransactionManager transactionManager
+
+    private static final String ANY_ORIGIN = "any_name"
+    private static final String ANY_TEXT = "any_text"
 
     def 'should get back new entity'() {
         given:
@@ -41,10 +53,15 @@ class ChatMsgNotificationServiceSpec extends Specification implements ChatMsgRep
         }, { println "KABOOM" })
 
         when:
-        Try.of({
-            ChatMsg.builder().origin("bla bla").build()
-        }).mapTry(chatMsgRepo.&save)
-
+        def transactionTemplate = new TransactionTemplate(transactionManager)
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                Try.of({ roomRepo.findAll().first() })
+                        .mapTry({ new ChatMsgEntity().setOrigin(ANY_ORIGIN).setChatRoom(it).setText(ANY_TEXT) })
+                        .mapTry({ chatMsgRepo.save(it) })
+                        .get()
+            }
+        })
         then:
         conditions.eventually {
             assert chatMsg.getOrigin() == "any_name"

@@ -3,44 +3,41 @@ package at.reactive.domain.room;
 
 import at.reactive.domain.chat.ChatMsg;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.vavr.collection.Seq;
+import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.ReplaySubject;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Objects;
 
-import static io.vavr.collection.List.empty;
-
-
-@Data
+@Value
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Room {
     String name;
-
     @Builder.Default
-    Seq<ChatMsg> chatMsgs = empty();
-    ObservableEmitter<ChatMsg> chatMsgEmitter;
+    public ReplaySubject<ChatMsg> allChatMsgs = ReplaySubject.createWithSize(1000);
+    @Builder.Default
+    public PublishSubject<ChatMsg> msgSubject = PublishSubject.create();
 
 
     public Observable<ChatMsg> addChatMsg(ChatMsg chatMsg) {
-        // this.chatMsgs.append(chatMsg);
+        chatMsg.setRoom(this);
+        this.allChatMsgs.onNext(chatMsg);
 
-        if (!Objects.isNull(chatMsgEmitter)) {
-            System.out.printf("EMITTING new chat msg to room: " + this);
-            chatMsgEmitter.onNext(chatMsg);
-        }
+        System.out.printf("EMITTING new chat msg to room: " + this);
+        msgSubject.onNext(chatMsg);
 
         return Observable
                 .create(emitter -> emitter.onNext(chatMsg));
     }
 
     public Observable<ChatMsg> startMsgObservation() {
-        Observable<ChatMsg> objectObservable = Observable.create(chatMsgEmitter -> this.chatMsgEmitter = chatMsgEmitter);
-        return objectObservable;
-    }
+        // return Observable.wrap(msgSubject);
 
+
+        return msgSubject
+                .flatMap(chatMsg -> Observable.<ChatMsg>create(e -> e.onNext(chatMsg)));
+    }
 }

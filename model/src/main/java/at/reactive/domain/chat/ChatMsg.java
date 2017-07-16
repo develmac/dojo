@@ -10,6 +10,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class ChatMsg {
     final String origin;
-    String text;
+    final String text;
     Room room;
 }
