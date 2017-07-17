@@ -34,10 +34,6 @@ public class Room {
     }
 
     public Observable<ChatMsg> startMsgObservation() {
-        // return Observable.wrap(msgSubject);
-
-
-        return msgSubject
-                .flatMap(chatMsg -> Observable.<ChatMsg>create(e -> e.onNext(chatMsg)));
+        return Observable.wrap(msgSubject);
     }
 }
